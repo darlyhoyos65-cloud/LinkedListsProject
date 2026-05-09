@@ -2,15 +2,15 @@
 {
     public class Node<T>
     {
-        public T Data { get; set; }
-        public Node<T> Next { get; set; }
-        public Node<T> Previous { get; set; } 
+        public T Dato { get; set; }
+        public Node<T> Siguiente { get; set; }
+        public Node<T> Anterior { get; set; }
 
-        public Node(T data)
+        public Node(T dato)
         {
-            Data = data;
-            Next = null;
-            Previous = null;
+            Dato = dato;
+            Siguiente = null;
+            Anterior = null;
         }
     }
 }

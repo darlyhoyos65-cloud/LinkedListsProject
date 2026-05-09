@@ -1,144 +1,147 @@
-﻿using LinkedListsProject.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LinkedListsProject.Models;
 
 namespace LinkedListsProject.Services
 {
     public class DoublyLinkedList<T> where T : IComparable<T>
     {
-        private Node<T> head;
-        private Node<T> tail;
+        private Node<T> cabeza;
+        private Node<T> cola;
 
-        public void Add(T data)
+        public void Add(T dato)
         {
-            Node<T> newNode = new Node<T>(data);
+            Node<T> nuevoNodo = new Node<T>(dato);
 
-            if (head == null)
+            if (cabeza == null)
             {
-                head = tail = newNode;
+                cabeza = cola = nuevoNodo;
                 return;
             }
 
-            if (data.CompareTo(head.Data) <= 0)
+            if (dato.CompareTo(cabeza.Dato) <= 0)
             {
-                newNode.Next = head;
-                head.Previous = newNode;
-                head = newNode;
+                nuevoNodo.Siguiente = cabeza;
+                cabeza.Anterior = nuevoNodo;
+                cabeza = nuevoNodo;
             }
-            else if (data.CompareTo(tail.Data) >= 0)
+            else if (dato.CompareTo(cola.Dato) >= 0)
             {
-                newNode.Previous = tail;
-                tail.Next = newNode;
-                tail = newNode;
+                nuevoNodo.Anterior = cola;
+                cola.Siguiente = nuevoNodo;
+                cola = nuevoNodo;
             }
             else
             {
-                Node<T> current = head;
-                while (current != null && current.Data.CompareTo(data) < 0)
+                Node<T> actual = cabeza;
+                while (actual != null && actual.Dato.CompareTo(dato) < 0)
                 {
-                    current = current.Next;
+                    actual = actual.Siguiente;
                 }
-                newNode.Next = current;
-                newNode.Previous = current.Previous;
-                current.Previous.Next = newNode;
-                current.Previous = newNode;
+                nuevoNodo.Siguiente = actual;
+                nuevoNodo.Anterior = actual.Anterior;
+                actual.Anterior.Siguiente = nuevoNodo;
+                actual.Anterior = nuevoNodo;
             }
         }
 
-        public void Display(bool forward)
+        public void Display(bool haciaAdelante)
         {
-            Node<T> temp = forward ? head : tail;
-            if (temp == null) return;
+            Node<T> temporal = haciaAdelante ? cabeza : cola;
+            if (temporal == null) return;
 
-            while (temp != null)
+            while (temporal != null)
             {
-                Console.Write($"[{temp.Data}] ");
-                temp = forward ? temp.Next : temp.Previous;
+                Console.Write($"[{temporal.Dato}] ");
+                temporal = haciaAdelante ? temporal.Siguiente : temporal.Anterior;
             }
             Console.WriteLine();
         }
 
         public void SortDescending()
         {
-            if (head == null) return;
+            if (cabeza == null) return;
 
-            Node<T> current = head;
+            Node<T> actual = cabeza;
             Node<T> temp = null;
-            tail = head;
+            cola = cabeza;
 
-            while (current != null)
+            while (actual != null)
             {
-                temp = current.Previous;
-                current.Previous = current.Next;
-                current.Next = temp;
-                head = current;
-                current = current.Previous;
+                temp = actual.Anterior;
+                actual.Anterior = actual.Siguiente;
+                actual.Siguiente = temp;
+                cabeza = actual;
+                actual = actual.Anterior;
             }
         }
 
-        public void ProcessStatistics(bool showGraph)
+        public void ProcessStatistics(bool mostrarGrafico)
         {
-            if (head == null) return;
+            if (cabeza == null) return;
 
-            var counts = new Dictionary<T, int>();
-            Node<T> temp = head;
+            var conteos = new Dictionary<T, int>();
+            Node<T> temp = cabeza;
             while (temp != null)
             {
-                if (counts.ContainsKey(temp.Data)) counts[temp.Data]++;
-                else counts[temp.Data] = 1;
-                temp = temp.Next;
+                if (conteos.ContainsKey(temp.Dato)) conteos[temp.Dato]++;
+                else conteos[temp.Dato] = 1;
+                temp = temp.Siguiente;
             }
 
-            if (showGraph)
+            if (mostrarGrafico)
             {
-                foreach (var entry in counts)
+                foreach (var entrada in conteos)
                 {
-                    Console.WriteLine($"{entry.Key.ToString().PadRight(10)} | {new string('*', entry.Value)} ({entry.Value})");
+                    Console.WriteLine($"{entrada.Key.ToString().PadRight(10)} | {new string('*', entrada.Value)} ({entrada.Value})");
                 }
             }
             else
             {
-                int max = counts.Values.Max();
-                var modes = counts.Where(x => x.Value == max).Select(x => x.Key);
-                Console.WriteLine("Mode(s): " + string.Join(", ", modes));
+                int max = conteos.Values.Max();
+                var modas = conteos.Where(x => x.Value == max).Select(x => x.Key);
+                Console.WriteLine("Moda(s): " + string.Join(", ", modas));
             }
         }
 
-        public bool Search(T data)
+        public bool Search(T dato)
         {
-            Node<T> temp = head;
+            Node<T> temp = cabeza;
             while (temp != null)
             {
-                if (temp.Data.Equals(data)) return true;
-                temp = temp.Next;
+                if (temp.Dato.Equals(dato)) return true;
+                temp = temp.Siguiente;
             }
             return false;
         }
 
-        public void Remove(T data, bool removeAll)
+        public void Remove(T dato, bool eliminarTodos)
         {
-            Node<T> current = head;
-            while (current != null)
+            Node<T> actual = cabeza;
+            while (actual != null)
             {
-                if (current.Data.Equals(data))
+                if (actual.Dato.Equals(dato))
                 {
-                    if (current == head)
+                    if (actual == cabeza)
                     {
-                        head = head.Next;
-                        if (head != null) head.Previous = null;
+                        cabeza = cabeza.Siguiente;
+                        if (cabeza != null) cabeza.Anterior = null;
                     }
-                    else if (current == tail)
+                    else if (actual == cola)
                     {
-                        tail = tail.Previous;
-                        if (tail != null) tail.Next = null;
+                        cola = cola.Anterior;
+                        if (cola != null) cola.Siguiente = null;
                     }
                     else
                     {
-                        current.Previous.Next = current.Next;
-                        current.Next.Previous = current.Previous;
+                        actual.Anterior.Siguiente = actual.Siguiente;
+                        actual.Siguiente.Anterior = actual.Anterior;
                     }
 
-                    if (!removeAll) return;
+                    if (!eliminarTodos) return;
                 }
-                current = current.Next;
+                actual = actual.Siguiente;
             }
         }
     }

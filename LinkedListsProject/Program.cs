@@ -7,57 +7,47 @@ namespace LinkedListsProject
     {
         static void Main(string[] args)
         {
-            DoublyLinkedList<string> list = new DoublyLinkedList<string>();
-            string option = "";
+            DoublyLinkedList<string> lista = new DoublyLinkedList<string>();
+            string op = "";
 
-            while (option != "0")
+            while (op != "0")
             {
-                Console.WriteLine("\n--- LINKED LISTS SYSTEM ---");
-                Console.WriteLine("1. Add Item");
-                Console.WriteLine("2. Show Forward");
-                Console.WriteLine("3. Show Backward");
-                Console.WriteLine("4. Sort Descending");
-                Console.WriteLine("5. Show Mode");
-                Console.WriteLine("6. Show Graph");
-                Console.WriteLine("7. Search");
-                Console.WriteLine("8. Remove One");
-                Console.WriteLine("9. Remove All");
-                Console.WriteLine("0. Exit");
-                Console.Write("\nSelect an option: ");
-                option = Console.ReadLine();
+                Console.WriteLine("\n--- MENU DE LISTAS DOBLES ---");
+                Console.WriteLine("1. Agregar");
+                Console.WriteLine("2. Mostrar (A-Z)");
+                Console.WriteLine("3. Mostrar (Z-A)");
+                Console.WriteLine("4. Invertir");
+                Console.WriteLine("5. Ver Moda");
+                Console.WriteLine("6. Ver Grafico");
+                Console.WriteLine("7. Buscar");
+                Console.WriteLine("8. Eliminar uno");
+                Console.WriteLine("9. Eliminar todos");
+                Console.WriteLine("0. Salir");
+                Console.Write("\nOpcion: ");
+                op = Console.ReadLine();
 
-                switch (option)
+                switch (op)
                 {
                     case "1":
-                        Console.Write("Enter data: ");
-                        list.Add(Console.ReadLine());
+                        Console.Write("Dato: ");
+                        lista.Add(Console.ReadLine());
                         break;
-                    case "2":
-                        list.Display(true);
-                        break;
-                    case "3":
-                        list.Display(false);
-                        break;
-                    case "4":
-                        list.SortDescending();
-                        break;
-                    case "5":
-                        list.ProcessStatistics(false);
-                        break;
-                    case "6":
-                        list.ProcessStatistics(true);
-                        break;
+                    case "2": lista.Display(true); break;
+                    case "3": lista.Display(false); break;
+                    case "4": lista.SortDescending(); break;
+                    case "5": lista.ProcessStatistics(false); break;
+                    case "6": lista.ProcessStatistics(true); break;
                     case "7":
-                        Console.Write("Search for: ");
-                        Console.WriteLine(list.Search(Console.ReadLine()));
+                        Console.Write("Buscar: ");
+                        Console.WriteLine(lista.Search(Console.ReadLine()) ? "Encontrado" : "No existe");
                         break;
                     case "8":
-                        Console.Write("Value to remove: ");
-                        list.Remove(Console.ReadLine(), false);
+                        Console.Write("Eliminar: ");
+                        lista.Remove(Console.ReadLine(), false);
                         break;
                     case "9":
-                        Console.Write("All values to remove: ");
-                        list.Remove(Console.ReadLine(), true);
+                        Console.Write("Eliminar todos: ");
+                        lista.Remove(Console.ReadLine(), true);
                         break;
                 }
             }
